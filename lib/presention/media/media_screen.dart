@@ -1,4 +1,5 @@
 import 'package:Media_Player/common_widget/neumorphic_loading_view.dart';
+import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -100,6 +101,13 @@ class MediaScreen extends StatelessWidget {
                                   const Color.fromARGB(255, 41, 41, 41),
                               height: 300,
                               width: 300,
+                              onPressed: () {
+                                if (mediaController.isPlaying.value) {
+                                  mediaController.pauseAudio();
+                                } else {
+                                  mediaController.resumeAudio();
+                                }
+                              },
                               child: Image.network(
                                 mediaController
                                         .media
@@ -190,7 +198,7 @@ class MediaScreen extends StatelessWidget {
                   ),
                   const Spacer(),
                   Stack(
-                    children: <Widget>[
+                    children: [
                       Align(
                         alignment: Alignment.centerLeft,
                         child: NeumorphicCircleView(
