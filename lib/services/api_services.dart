@@ -2,7 +2,8 @@ import 'dart:developer';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:smit_smit_media_player/model/media_model.dart';
+
+import '../model/media_model.dart';
 
 class ApiServices {
   ApiServices._();
@@ -15,7 +16,7 @@ class ApiServices {
   Future<List<Media>> fetchVideos({required String query}) async {
     try {
       final url = Uri.parse(
-          '$_baseUrl?part=snippet&maxResults=10&q=$query&type=song&key=$_apiKey');
+          '$_baseUrl?part=snippet&maxResults=50&q=$query&type=song&key=$_apiKey');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {

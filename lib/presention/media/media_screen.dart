@@ -1,20 +1,17 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
 import 'package:gap/gap.dart';
-
 import 'package:get/get.dart';
-import 'package:smit_smit_media_player/common_widget/neumorphic_circle.dart';
-import 'package:smit_smit_media_player/common_widget/neumorphic_progress.dart';
-import 'package:smit_smit_media_player/presention/media/media_controller.dart';
 import 'package:styled_widget/styled_widget.dart';
 
-class MediaScreen extends StatelessWidget {
-  const MediaScreen({super.key});
+import '../../common_widget/neumorphic_circle.dart';
+import 'media_controller.dart';
 
+class MediaScreen extends StatelessWidget {
+  MediaScreen({super.key});
+
+  final MediaController mediaController = Get.put(MediaController());
   @override
   Widget build(BuildContext context) {
-    final MediaController mediaController = Get.put(MediaController());
-
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 33, 36, 40),
       body: Container(
@@ -28,7 +25,7 @@ class MediaScreen extends StatelessWidget {
             ],
           ),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -40,6 +37,7 @@ class MediaScreen extends StatelessWidget {
                   child: NeumorphicCircleView(
                     height: 50,
                     onPressed: () {
+                      mediaController.stopAudio();
                       Get.back();
                     },
                     width: 50,
@@ -94,8 +92,9 @@ class MediaScreen extends StatelessWidget {
                     child: Image.network(
                       mediaController.media.value.snippet.value.thumbnails.value
                           .high.value.url.value,
-                      loadingBuilder: (context, child, loadingProgress) =>
-                          const Center(child: CircularProgressIndicator()),
+
+                      // loadingBuilder: (context, child, loadingProgress) =>
+                      //     const Center(child: CircularProgressIndicator()),
                     ),
                   ),
                 ),
@@ -108,8 +107,11 @@ class MediaScreen extends StatelessWidget {
                 height: 45,
                 alignment: Alignment.bottomCenter,
                 child: Text(
-                  mediaController.media.value.snippet.value.channelTitle.value,
+                  mediaController.media.value.snippet.value.title.value
+                      .split('|')[0],
                   textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: Colors.white.withOpacity(0.65),
                     inherit: false,
@@ -121,65 +123,42 @@ class MediaScreen extends StatelessWidget {
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 35,
-                alignment: Alignment.bottomCenter,
-                child: Text(
-                  'Feat. Some Band',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.5),
-                    inherit: false,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+              child: Obx(
+                () {
+                  return Container(
+                    height: 35,
+                    alignment: Alignment.bottomCenter,
+                    child: Text(
+                      mediaController
+                          .media.value.snippet.value.channelTitle.value,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.5),
+                        inherit: false,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
             const Gap(20),
-            Stack(
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Container(
-                    height: 15,
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      '1:17',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.5),
-                        inherit: false,
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+            Obx(
+              () {
+                return NeumorphicSlider(
+                  value: mediaController.progress.value,
+                  min: 0,
+                  max: 1,
+                  onChanged: (value) {
+                    mediaController.seekTo(value);
+                  },
+                  currentPosition: Duration(
+                    milliseconds: mediaController.currentPosition.value.toInt(),
                   ),
-                ),
-                const Align(
-                  alignment: Alignment.bottomCenter,
-                  child: NeumorphicProgressView(
-                    progress: 0.5,
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Container(
-                    height: 15,
-                    alignment: Alignment.topRight,
-                    child: Text(
-                      '2:46',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.5),
-                        inherit: false,
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+                  totalDuration: mediaController.totalDuration.value,
+                );
+              },
             ),
             const Spacer(),
             Stack(
@@ -234,9 +213,7 @@ class MediaScreen extends StatelessWidget {
                     height: 60,
                     width: 60,
                     child: GestureDetector(
-                      onTap: () {
-                        // Handle forward action here
-                      },
+                      onTap: () {},
                       child: const Icon(
                         Icons.fast_forward_rounded,
                         size: 28,
@@ -252,5 +229,64 @@ class MediaScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class NeumorphicSlider extends StatelessWidget {
+  final double value;
+  final double min;
+  final double max;
+  final ValueChanged<double> onChanged;
+  final Duration currentPosition;
+  final Duration totalDuration;
+
+  NeumorphicSlider({
+    required this.value,
+    required this.min,
+    required this.max,
+    required this.onChanged,
+    required this.currentPosition,
+    required this.totalDuration,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          _formatDuration(currentPosition),
+          style: TextStyle(
+            color: Colors.white.withOpacity(0.5),
+            fontSize: 13,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Expanded(
+          child: Slider(
+            value: value,
+            min: min,
+            max: max,
+            onChanged: onChanged,
+            activeColor: Colors.deepOrange,
+            inactiveColor: Colors.grey,
+            thumbColor: Colors.deepOrange,
+          ),
+        ),
+        Text(
+          _formatDuration(totalDuration),
+          style: TextStyle(
+            color: Colors.white.withOpacity(0.5),
+            fontSize: 13,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _formatDuration(Duration duration) {
+    final minutes = duration.inMinutes.toString().padLeft(2, '0');
+    final seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
+    return '$minutes:$seconds';
   }
 }
