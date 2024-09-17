@@ -76,82 +76,80 @@ class MediaListScreen extends StatelessWidget {
           () {
             return Stack(
               children: [
-                Expanded(
-                  child: LiquidPullToRefresh(
-                    backgroundColor: const Color.fromARGB(255, 33, 36, 40),
-                    color: Colors.grey.shade800,
-                    onRefresh: controller.pullToRefresh,
-                    child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      itemCount: controller.medialList.length,
-                      itemBuilder: (context, index) {
-                        Media media = controller.medialList[index];
-                        return GestureDetector(
-                          onTap: () {
-                            FocusManager.instance.primaryFocus!.unfocus();
-                            Get.toNamed(Routes.media, arguments: index);
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(vertical: 10),
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 33, 36, 40),
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.white.withOpacity(0.1),
-                                  offset: const Offset(-4, -4),
-                                  blurRadius: 6,
-                                  spreadRadius: 1,
+                LiquidPullToRefresh(
+                  backgroundColor: const Color.fromARGB(255, 33, 36, 40),
+                  color: Colors.grey.shade800,
+                  onRefresh: controller.pullToRefresh,
+                  child: ListView.builder(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    itemCount: controller.medialList.length,
+                    itemBuilder: (context, index) {
+                      Media media = controller.medialList[index];
+                      return GestureDetector(
+                        onTap: () {
+                          FocusManager.instance.primaryFocus!.unfocus();
+                          Get.toNamed(Routes.media, arguments: index);
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 33, 36, 40),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.white.withOpacity(0.1),
+                                offset: const Offset(-4, -4),
+                                blurRadius: 6,
+                                spreadRadius: 1,
+                              ),
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.6),
+                                offset: const Offset(4, 4),
+                                blurRadius: 8,
+                                spreadRadius: 1,
+                              ),
+                            ],
+                          ),
+                          child: ListTile(
+                            leading: ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: Image.network(
+                                media.snippet.value.thumbnails.value.high.value
+                                    .url.value,
+                                width: 50,
+                                height: 50,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    const Icon(
+                                  Icons.stop_screen_share,
                                 ),
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.6),
-                                  offset: const Offset(4, 4),
-                                  blurRadius: 8,
-                                  spreadRadius: 1,
-                                ),
-                              ],
+                              ),
                             ),
-                            child: ListTile(
-                              leading: ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: Image.network(
-                                  media.snippet.value.thumbnails.value.high
-                                      .value.url.value,
-                                  width: 50,
-                                  height: 50,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      const Icon(
-                                    Icons.stop_screen_share,
-                                  ),
-                                ),
-                              ),
-                              title: Text(
-                                media.snippet.value.title.value,
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              subtitle: Text(
-                                media.snippet.value.description.value,
-                                style: TextStyle(
-                                    color: Colors.white.withOpacity(0.7)),
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              trailing: const Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.white,
-                              ),
+                            title: Text(
+                              media.snippet.value.title.value,
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            subtitle: Text(
+                              media.snippet.value.description.value,
+                              style: TextStyle(
+                                  color: Colors.white.withOpacity(0.7)),
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            trailing: const Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.white,
                             ),
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 if (controller.isLoading.value) const NeumorphicLoadingView(),

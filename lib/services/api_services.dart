@@ -9,7 +9,7 @@ class ApiServices {
   ApiServices._();
   static final ApiServices instance = ApiServices._();
 
-  final String _apiKey = 'AIzaSyDmEnpCsWQLldwAMBMpxdL6YYrBpOWW8II';
+  final String _apiKey = 'AIzaSyCBXOeiwRxbz2Vx8j2oGnWbG60cj1InN7Y';
   final String _baseUrl = 'https://www.googleapis.com/youtube/v3/search';
 
   // Method to fetch videos from YouTube API
@@ -30,7 +30,7 @@ class ApiServices {
             'Failed to load videos. Status code: ${response.statusCode}');
       }
     } catch (e) {
-      Logger().i('Error fetching videos: $e');
+      Logger().e('Error fetching videos: $e');
       return [];
     }
   }
