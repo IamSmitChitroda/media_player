@@ -10,6 +10,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      theme: ThemeData(
+        colorSchemeSeed: const Color(0xff212428ff),
+      ),
       debugShowCheckedModeBanner: false,
       getPages: Routes.routeList,
       initialRoute: Routes.mediaList,

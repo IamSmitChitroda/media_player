@@ -1,27 +1,31 @@
+import 'package:Media_Player/presention/media_list/media_list_controller.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:logger/logger.dart';
 import '/model/media_model.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class MediaController extends GetxController {
+  final MediaListController _mediaListController =
+      Get.find<MediaListController>();
+
   final AudioPlayer audioPlayer = AudioPlayer();
   final YoutubeExplode _youtubeExplode = YoutubeExplode();
   var isPlaying = false.obs;
   var isLoading = true.obs;
   String? audioUrl;
 
-  Rx<Media> media = (Get.arguments as Media).obs;
+  int _currentSongIndex = Get.arguments as int;
+  Rx<Media?> media = Rx<Media?>(null);
   RxDouble progress = 0.0.obs;
   RxDouble currentPosition = 0.0.obs;
   Rx<Duration> totalDuration = Duration.zero.obs;
 
   @override
   Future<void> onInit() async {
+    media.value = _mediaListController.medialList[_currentSongIndex];
     super.onInit();
 
-    await playYouTubeAudio(media.value.id.value.videoId.value);
-
+    await playYouTubeAudio(media.value!.id.value.videoId.value);
     audioPlayer.positionStream.listen((position) {
       if (totalDuration.value.inMilliseconds > 0) {
         currentPosition.value = position.inMilliseconds.toDouble();
@@ -40,7 +44,6 @@ class MediaController extends GetxController {
   Future<void> playYouTubeAudio(String videoId) async {
     try {
       isLoading.value = true;
-      // _youtubeExplode.
       var manifest =
           await _youtubeExplode.videos.streamsClient.getManifest(videoId);
       var audioStreamInfo = manifest.audioOnly.withHighestBitrate();
@@ -73,6 +76,31 @@ class MediaController extends GetxController {
   void stopAudio() {
     audioPlayer.stop();
     isPlaying.value = false;
+  }
+
+  Future<void> forwardAudio() async {
+    isLoading(true);
+    if (_currentSongIndex != (_mediaListController.medialList.length - 1)) {
+      _currentSongIndex++;
+      media.value = _mediaListController.medialList[_currentSongIndex];
+      await playYouTubeAudio(media.value!.id.value.videoId.value);
+    } else {
+      Get.snackbar("Forward Failed", "Try Again !!!",
+          snackStyle: SnackStyle.FLOATING);
+    }
+    isLoading(false);
+  }
+
+  Future<void> backwardAudio() async {
+    isLoading(true);
+    if (_currentSongIndex != 0) {
+      _currentSongIndex--;
+      media.value = _mediaListController.medialList[_currentSongIndex];
+      await playYouTubeAudio(media.value!.id.value.videoId.value);
+    } else {
+      Get.snackbar("Backward Failed", "Try Again !!!");
+    }
+    isLoading(false);
   }
 
   @override

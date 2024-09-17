@@ -28,16 +28,18 @@ class _NeumorphicLoadingViewState extends State<NeumorphicLoadingView>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Center(
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return NeumorphicCircleProgressIndicator(
-              progress: _controller.value,
-            );
-          },
+    return AbsorbPointer(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Center(
+          child: AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return NeumorphicCircleProgressIndicator(
+                progress: _controller.value,
+              );
+            },
+          ),
         ),
       ),
     );

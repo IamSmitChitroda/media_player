@@ -37,17 +37,22 @@ dependencies:
   cupertino_icons: ^1.0.8
   firebase_core: ^3.4.1
   firebase_auth: ^5.2.1
+  google_sign_in: ^6.2.1
+  cloud_firestore: ^5.4.2
   get: ^4.6.6
   http: ^1.2.2
-  carousel_slider: ^5.0.0
+  #carousel_slider: ^5.0.0
   just_audio: ^0.9.40
   youtube_explode_dart: ^2.2.1
+  #flutter_local_notifications: ^9.0.2
   google_fonts: ^6.2.1
   styled_widget: ^0.4.1
   flutter_neumorphic_plus: ^3.4.0
   liquid_pull_to_refresh: ^3.0.1
   gap: ^3.0.1
   logger: ^2.4.0
+  sidebarx: ^0.17.1
+  awesome_snackbar_content: ^0.1.4
 
 dev_dependencies:
   flutter_test:
