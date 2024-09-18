@@ -100,6 +100,13 @@ class MediaScreen extends StatelessWidget {
                                   const Color.fromARGB(255, 41, 41, 41),
                               height: 300,
                               width: 300,
+                              onPressed: () {
+                                if (mediaController.isPlaying.value) {
+                                  mediaController.pauseAudio();
+                                } else {
+                                  mediaController.resumeAudio();
+                                }
+                              },
                               child: Image.network(
                                 mediaController
                                         .media

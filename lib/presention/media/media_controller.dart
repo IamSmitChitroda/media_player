@@ -1,4 +1,6 @@
 import 'package:Media_Player/presention/media_list/media_list_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import '/model/media_model.dart';
@@ -85,8 +87,14 @@ class MediaController extends GetxController {
       media.value = _mediaListController.medialList[_currentSongIndex];
       await playYouTubeAudio(media.value!.id.value.videoId.value);
     } else {
-      Get.snackbar("Forward Failed", "Try Again !!!",
-          snackStyle: SnackStyle.FLOATING);
+      IconSnackBar.show(
+        Get.context!,
+        label: "Forward Failed",
+        direction: DismissDirection.up,
+        snackBarType: SnackBarType.fail,
+      );
+      // Get.snackbar("Forward Failed", "Try Again !!!",
+      //     snackStyle: SnackStyle.FLOATING);
     }
     isLoading(false);
   }
@@ -98,7 +106,13 @@ class MediaController extends GetxController {
       media.value = _mediaListController.medialList[_currentSongIndex];
       await playYouTubeAudio(media.value!.id.value.videoId.value);
     } else {
-      Get.snackbar("Backward Failed", "Try Again !!!");
+      IconSnackBar.show(
+        Get.context!,
+        label: "Backward Failed",
+        direction: DismissDirection.up,
+        snackBarType: SnackBarType.fail,
+      );
+      // Get.snackbar("Backward Failed", "Try Again !!!");
     }
     isLoading(false);
   }

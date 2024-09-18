@@ -1,3 +1,4 @@
+import 'package:Media_Player/presention/splash/splash_screen.dart';
 import 'package:get/get.dart';
 
 import 'presention/media/media_screen.dart';
@@ -9,6 +10,7 @@ class Routes {
   static String media = "/Media";
 
   static List<GetPage> routeList = [
+    GetPage(name: splash, page: () => SplashScreen()),
     GetPage(name: mediaList, page: () => MediaListScreen()),
     GetPage(name: media, page: () => MediaScreen()),
   ];
