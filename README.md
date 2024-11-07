@@ -33,7 +33,7 @@ https://github.com/user-attachments/assets/9c19c228-80c8-40b3-a3f3-db3d20500141
 
 ### Prerequisites
 
-- Flutter SDK version: `3.24.0` [Flutter Sdk](https://docs.flutter.dev/release/archive).
+- Flutter SDK version: `3.24.3` [Flutter Sdk](https://docs.flutter.dev/release/archive).
 - YouTube API Key: Get an API key from [YouTube Data API](https://console.cloud.google.com/).
 
 ### Installation

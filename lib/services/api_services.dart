@@ -9,7 +9,7 @@ class ApiServices {
   ApiServices._();
   static final ApiServices instance = ApiServices._();
 
-  final String _apiKey = 'AIzaSyCBXOeiwRxbz2Vx8j2oGnWbG60cj1InN7Y';
+  final String _apiKey = 'AIzaSyDFRW13X5f5R5WPyfKa2hRL5jz88fIxdEs';
   final String _baseUrl = 'https://www.googleapis.com/youtube/v3/search';
 
   // Method to fetch videos from YouTube API
